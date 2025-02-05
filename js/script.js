@@ -1,7 +1,6 @@
 async function loadData() {
-    const response = await fetch('data.json');
-    const data = await response.json();
-    return data;
+    const response = await fetch('data/nace.json');
+    return await response.json();
 }
 
 async function searchData() {
