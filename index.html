@@ -29,42 +29,48 @@
 		</nav>
 	</header>
 
-	<main class="container">
+	<main class="container" role="main">
 		<!-- Firma Sorgulama Bölümü -->
 		<section id="firma" class="section-block">
 			<h1>Firma İSG-KATİP Sorgulama</h1>
 			<div class="info-text">
 				<p>Firma bilgilerini ve İSG-KATİP giriş durumlarını sorgulayabilirsiniz.</p>
-				<p class="note" style="font-style: italic"><b>Not:</b> İSG-KATİP verileri anlık değildir. Ben ne zaman verileri güncellemişsem, o zamana aittir :P</p>
+				<p class="note" style="font-style: italic"><b>Not:</b> İSG-KATİP verileri anlık değildir. Ben ne zaman
+					verileri <u>güncellemişsem</u>, o zamana aittir :P</p>
 			</div>
 
 			<div class="search-container">
-				<div class="search-group">
-					<label for="sozlesmeSelect">İSG-KATİP Durumu:</label>
-					<select id="sozlesmeSelect">
-						<option value="">Tümü</option>
-						<option value="TRUE">Yapıldı</option>
-						<option value="FALSE">Yapılmadı</option>
-					</select>
-				</div>
+				<form id="firmaSearchForm" onsubmit="event.preventDefault(); searchFirma();">
+					<div class="search-group">
+						<label for="sozlesmeSelect">İSG-KATİP Durumu:</label>
+						<select id="sozlesmeSelect">
+							<option value="">Tümü</option>
+							<option value="TRUE">Yapıldı</option>
+							<option value="FALSE">Yapılmadı</option>
+						</select>
+					</div>
 
-				<div class="search-group">
-					<label for="firmaAdi">Firma Adı:</label>
-					<input type="text" id="firmaAdi" placeholder="Firma adı giriniz">
-				</div>
+					<div class="search-group">
+						<label for="firmaAdi">Firma Adı:</label>
+						<input type="text" id="firmaAdi" placeholder="Firma adı giriniz">
+					</div>
+					
+					<div class="search-group">
+						<label for="sgkNo">SGK İşyeri Sicil No:</label>
+						<input type="text" id="sgkNo" placeholder="SGK no giriniz">
+					</div>
+					
+					<div class="search-group">
+						<label for="yetkiliAdi">Yetkili Adı Soyadı:</label>
+						<input type="text" id="yetkiliAdi" placeholder="Yetkili adı soyadı giriniz">
+					</div>
 
-				<div class="search-group">
-					<label for="sgkNo">SGK İşyeri Sicil No:</label>
-					<input type="text" id="sgkNo" placeholder="SGK no giriniz">
-				</div>
+					<button onclick="searchFirma()" class="search-button">Firma Ara</button>
 
-				<div class="search-group">
-					<label for="yetkiliAdi">Yetkili Adı Soyadı:</label>
-					<input type="text" id="yetkiliAdi" placeholder="Yetkili adı soyadı giriniz">
-				</div>
+				</form>
 
-				<button onclick="searchFirma()" class="search-button">Firma Ara</button>
 			</div>
+
 			<div id="firmaResult" class="result-container"></div>
 		</section>
 
@@ -76,11 +82,15 @@
 			</div>
 
 			<div class="search-container">
-				<div class="search-group">
-					<input type="text" id="naceInput" placeholder="NACE kodu giriniz (Örn: 01.11.07)">
-					<button onclick="searchNace()" class="search-button">NACE Ara</button>
-				</div>
+				<form id="naceSearchForm" onsubmit="event.preventDefault(); searchNACE();">
+					<div class="search-group">
+						<input type="text" id="naceInput" placeholder="NACE kodu giriniz (Örn: 01.11.07)">
+						<button type="submit" class="search-button">NACE Ara</button>
+					</div>
+				</form>
 			</div>
+
+
 			<div id="naceResult" class="result-container"></div>
 		</section>
 	</main>
@@ -88,16 +98,20 @@
 	<footer>
 		<div class="footer-content">
 			<div class="social-links">
-				<a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-				<a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-				<a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+				<a href="https://linkedin.com/in/YOUR_PROFILE" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i
+						class="fab fa-linkedin"></i></a>
+				<a href="https://github.com/HErsoy09" target="_blank" rel="noopener noreferrer" title="GitHub"><i
+						class="fab fa-github"></i></a>
+				<a href="https://twitter.com/YOUR_PROFILE" target="_blank" rel="noopener noreferrer" title="Twitter"><i
+						class="fab fa-twitter"></i></a>
 			</div>
-			<p>&copy; 2024 Hakan ERSOY - Tüm hakları saklıdır</p>
+			<p>&copy; 2025 Hakan ERSOY - Tüm hakları Hakan'ındır... :)</p>
 		</div>
 	</footer>
 
 	<!-- Scripts -->
-	<script src="js/script.js"></script>
+	<script src="js/config.js" defer></script>
+	<script src="js/script.js" defer></script>
 </body>
 
 </html>
