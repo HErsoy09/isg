@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="İSG-KATİP Firma Sorgulama ve NACE Kodu Tehlike Sınıfı Sorgulama">
+	<meta name="keywords" content="isg, isgkatip, nace, tehlike sınıfı">
+	<meta name="author" content="Hakan ERSOY">
+
+	<title>İSG Sorgulama Sistemi</title>
+
+	<!-- Favicon -->
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+
+	<!-- CSS ve Font Dosyaları -->
+	<link rel="stylesheet" href="css/hisge.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+	<header>
+		<nav>
+			<ul>
+				<li><a href="#firma">Firma Sorgulama</a></li>
+				<li><a href="#nace">NACE Sorgulama</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<main class="container">
+		<!-- Firma Sorgulama Bölümü -->
+		<section id="firma" class="section-block">
+			<h1>Firma İSG-KATİP Sorgulama</h1>
+			<div class="info-text">
+				<p>Firma bilgilerini ve İSG-KATİP giriş durumlarını sorgulayabilirsiniz.</p>
+				<p class="note" style="font-style: italic"><b>Not:</b> İSG-KATİP verileri anlık değildir. Ben ne zaman verileri güncellemişsem, o zamana aittir :P</p>
+			</div>
+
+			<div class="search-container">
+				<div class="search-group">
+					<label for="sozlesmeSelect">İSG-KATİP Durumu:</label>
+					<select id="sozlesmeSelect">
+						<option value="">Tümü</option>
+						<option value="TRUE">Yapıldı</option>
+						<option value="FALSE">Yapılmadı</option>
+					</select>
+				</div>
+
+				<div class="search-group">
+					<label for="firmaAdi">Firma Adı:</label>
+					<input type="text" id="firmaAdi" placeholder="Firma adı giriniz">
+				</div>
+
+				<div class="search-group">
+					<label for="sgkNo">SGK İşyeri Sicil No:</label>
+					<input type="text" id="sgkNo" placeholder="SGK no giriniz">
+				</div>
+
+				<div class="search-group">
+					<label for="yetkiliAdi">Yetkili Adı Soyadı:</label>
+					<input type="text" id="yetkiliAdi" placeholder="Yetkili adı soyadı giriniz">
+				</div>
+
+				<button onclick="searchFirma()" class="search-button">Firma Ara</button>
+			</div>
+			<div id="firmaResult" class="result-container"></div>
+		</section>
+
+		<!-- NACE Sorgulama Bölümü -->
+		<section id="nace" class="section-block">
+			<h2>NACE Kodu Tehlike Sınıfı Sorgulama</h2>
+			<div class="info-text">
+				<p>NACE koduna göre tehlike sınıfı ve faaliyet açıklamasını sorgulayabilirsiniz.</p>
+			</div>
+
+			<div class="search-container">
+				<div class="search-group">
+					<input type="text" id="naceInput" placeholder="NACE kodu giriniz (Örn: 01.11.07)">
+					<button onclick="searchNace()" class="search-button">NACE Ara</button>
+				</div>
+			</div>
+			<div id="naceResult" class="result-container"></div>
+		</section>
+	</main>
+
+	<footer>
+		<div class="footer-content">
+			<div class="social-links">
+				<a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+				<a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+				<a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+			</div>
+			<p>&copy; 2024 Hakan ERSOY - Tüm hakları saklıdır</p>
+		</div>
+	</footer>
+
+	<!-- Scripts -->
+	<script src="js/script.js"></script>
+</body>
+
+</html>
