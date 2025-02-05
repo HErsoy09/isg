@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Firma Sorgulama</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Yeni Firma Sorgulama</h1>
+        <input type="text" id="searchInput" placeholder="Sorgulamak istediğiniz firma bilgisini giriniz...">
+        <button onclick="searchData()">Ara</button>
+        <div id="result"></div>
+    </div>
+    <script>
+        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxZxeLgxKxr2P4313yGgqxxKuEZtG99fk2-FdRD2PYHW9cHUfrVGO1vE5eag7q5nwxZQQ/exec'; // Google Apps Script URL'nizi buraya ekleyin
+
+        async function loadData() {
+            try {
+                const response = await fetch(SHEET_URL);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Veri yükleme hatası:', error);
+                return [];
+            }
+        }
+
+        async function searchData() {
+            const searchInput = document.getElementById("searchInput").value;
+            const resultDiv = document.getElementById("result");
+            
+            if (!searchInput) {
+                resultDiv.innerHTML = "<p>Lütfen aramak istediğiniz firma bilgisini girin.</p>";
+                return;
+            }
+
+            try {
+                const data = await loadData();
+                const foundData = data.find(item => item.NACE === searchInput);
+
+                if (foundData) {
+                    resultDiv.innerHTML = `
+                        <p><strong>Açıklama:</strong> ${foundData.Tanım}</p>
+                        <p><strong>Tehlike Sınıfı:</strong> ${foundData["Tehlike Sınıfı"]}</p>
+                    `;
+                } else {
+                    resultDiv.innerHTML = "<p>Veri bulunamadı.</p>";
+                }
+            } catch (error) {
+                resultDiv.innerHTML = "<p>Bir hata oluştu.</p>";
+                console.error('Arama hatası:', error);
+            }
+        }
+    </script>
+</body>
+</html>
