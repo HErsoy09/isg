@@ -1,103 +1,366 @@
-<!DOCTYPE html>
-<html lang="tr">
+/* Reset ve Genel Stiller */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="İSG-KATİP Firma Sorgulama ve NACE Kodu Tehlike Sınıfı Sorgulama">
-	<meta name="keywords" content="isg, isgkatip, nace, tehlike sınıfı">
-	<meta name="author" content="Hakan ERSOY">
+:root {
+    /* Ana Renkler */
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --text-color: #333;
+    --light-gray: #f5f6fa;
+    --dark-gray: #2d3436;
 
-	<title>İSG Sorgulama Sistemi</title>
+    /* Font Boyutları */
+    --h1-size: 2.5rem;
+    --h2-size: 2rem;
+    --h3-size: 1.75rem;
+    --body-size: 1rem;
+    --small-size: 0.875rem;
 
-	<!-- Favicon -->
-	<link rel="icon" type="image/x-icon" href="favicon.ico">
+    /* Boşluklar */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
 
-	<!-- CSS ve Font Dosyaları -->
-	<link rel="stylesheet" href="css/hisge.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-</head>
+    /* Border Radius */
+    --border-radius: 8px;
 
-<body>
-	<header>
-		<nav>
-			<ul>
-				<li><a href="#firma">Firma Sorgulama</a></li>
-				<li><a href="#nace">NACE Sorgulama</a></li>
-			</ul>
-		</nav>
-	</header>
+    /* Geçiş Efekti */
+    --transition: all 0.3s ease;
 
-	<main class="container">
-		<!-- Firma Sorgulama Bölümü -->
-		<section id="firma" class="section-block">
-			<h1>Firma İSG-KATİP Sorgulama</h1>
-			<div class="info-text">
-				<p>Firma bilgilerini ve İSG-KATİP giriş durumlarını sorgulayabilirsiniz.</p>
-				<p class="note" style="font-style: italic"><b>Not:</b> İSG-KATİP verileri anlık değildir. Ben ne zaman verileri güncellemişsem, o zamana aittir :P</p>
-			</div>
+    --header-height: 60px;
+}
 
-			<div class="search-container">
-				<div class="search-group">
-					<label for="sozlesmeSelect">İSG-KATİP Durumu:</label>
-					<select id="sozlesmeSelect">
-						<option value="">Tümü</option>
-						<option value="TRUE">Yapıldı</option>
-						<option value="FALSE">Yapılmadı</option>
-					</select>
-				</div>
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--light-gray);
+}
 
-				<div class="search-group">
-					<label for="firmaAdi">Firma Adı:</label>
-					<input type="text" id="firmaAdi" placeholder="Firma adı giriniz">
-				</div>
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-bottom: var(--spacing-sm);
+    font-weight: 700;
+    line-height: 1.2;
+}
 
-				<div class="search-group">
-					<label for="sgkNo">SGK İşyeri Sicil No:</label>
-					<input type="text" id="sgkNo" placeholder="SGK no giriniz">
-				</div>
+h1 {
+    font-size: var(--h1-size);
+}
 
-				<div class="search-group">
-					<label for="yetkiliAdi">Yetkili Adı Soyadı:</label>
-					<input type="text" id="yetkiliAdi" placeholder="Yetkili adı soyadı giriniz">
-				</div>
+h2 {
+    font-size: var(--h2-size);
+}
 
-				<button onclick="searchFirma()" class="search-button">Firma Ara</button>
-			</div>
-			<div id="firmaResult" class="result-container"></div>
-		</section>
+h3 {
+    font-size: var(--h3-size);
+}
 
-		<!-- NACE Sorgulama Bölümü -->
-		<section id="nace" class="section-block">
-			<h2>NACE Kodu Tehlike Sınıfı Sorgulama</h2>
-			<div class="info-text">
-				<p>NACE koduna göre tehlike sınıfı ve faaliyet açıklamasını sorgulayabilirsiniz.</p>
-			</div>
+p {
+    margin-bottom: var(--spacing-sm);
+}
 
-			<div class="search-container">
-				<div class="search-group">
-					<input type="text" id="naceInput" placeholder="NACE kodu giriniz (Örn: 01.11.07)">
-					<button onclick="searchNace()" class="search-button">NACE Ara</button>
-				</div>
-			</div>
-			<div id="naceResult" class="result-container"></div>
-		</section>
-	</main>
+a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
 
-	<footer>
-		<div class="footer-content">
-			<div class="social-links">
-				<a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-				<a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-				<a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-			</div>
-			<p>&copy; 2024 Hakan ERSOY - Tüm hakları saklıdır</p>
-		</div>
-	</footer>
+a:hover {
+    color: var(--primary-color);
+}
 
-	<!-- Scripts -->
-	<script src="js/script.js"></script>
-</body>
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-sm);
+}
 
-</html>
+/* Header */
+header {
+    background-color: var(--primary-color);
+    padding: var(--spacing-md) 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    height: var(--header-height);
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+}
+
+nav ul li {
+    margin: 0 var(--spacing-sm);
+}
+
+nav ul li a {
+    color: white;
+    font-weight: 500;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius);
+}
+
+nav ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+main {
+    padding-top: calc(var(--header-height) + 2rem);
+    /* Header yüksekliği + ekstra boşluk */
+}
+
+/* Firma Section */
+#firma {
+    margin-top: calc(var(--header-height) + 2rem);
+    /* Header yüksekliği + ekstra boşluk */
+    min-height: 100vh;
+    /* Tam ekran yüksekliği */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('src/firma-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: var(--spacing-xl);
+    position: relative;
+    /* Pozisyon ayarı */
+    top: 0;
+    /* Üst konumlandırma */
+}
+
+/* NACE Section */
+#nace {
+    padding: var(--spacing-xl) 0;
+}
+
+article {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 500;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: var(--spacing-sm);
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: var(--body-size);
+    transition: var(--transition);
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+button {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: var(--body-size);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+button:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+/* Footer */
+footer {
+    background-color: var(--dark-gray);
+    color: white;
+    padding: var(--spacing-lg) 0;
+    margin-top: var(--spacing-xl);
+}
+
+.footer-content {
+    text-align: center;
+}
+
+.social-links {
+    margin-bottom: var(--spacing-md);
+}
+
+.social-links a {
+    color: white;
+    margin: 0 var(--spacing-xs);
+    font-size: 1.5rem;
+}
+
+.social-links a:hover {
+    color: var(--secondary-color);
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.mt-1 {
+    margin-top: var(--spacing-sm);
+}
+
+.mt-2 {
+    margin-top: var(--spacing-md);
+}
+
+.mt-3 {
+    margin-top: var(--spacing-lg);
+}
+
+.mb-1 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.mb-2 {
+    margin-bottom: var(--spacing-md);
+}
+
+.mb-3 {
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    :root {
+        --h1-size: 2rem;
+        --h2-size: 1.75rem;
+        --h3-size: 1.5rem;
+        --header-height: 60px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li {
+        margin: var(--spacing-xs) 0;
+    }
+
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+
+    #firma {
+        margin-top: calc(var(--header-height) + 1rem);
+        padding: var(--spacing-md);
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 1s ease-in;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light-gray);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+
+
+
+#sozlesmeSelect {
+    padding: var(--spacing-sm);
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+    font-size: var(--body-size);
+    transition: var(--transition);
+}
+
+
+.search-container {
+    margin-bottom: 20px;
+}
+
+.search-group {
+    margin-bottom: 10px;
+}
+
+.search-group label {
+    display: inline-block;
+    width: 150px;
+}
+
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.result-table th,
+.result-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.result-table th {
+    background-color: #f4f4f4;
+}
