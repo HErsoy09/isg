@@ -63,7 +63,6 @@ async function searchFirma() {
 		const data = await loadDataFirma();
 
 		let filteredData = data.filter(item => {
-			// Sözleşme durumu kontrolü düzeltildi
 			const matchSozlesme = !sozlesme ||
 				(sozlesme === "TRUE" && item.SozlesmeGirisiYapildiMi === true) ||
 				(sozlesme === "FALSE" && item.SozlesmeGirisiYapildiMi === false);
@@ -95,11 +94,15 @@ function createTableHTML(data) {
 				<tr>
 					<th>İSG-KATİP Girişi</th>
 					<th>Firma Adı</th>
-					<th>SGK No</th>
 					<th>Yetkili</th>
+					<th>İletişim</th>
+					<th>SGK No</th>
 					<th>Tehlike Sınıfı</th>
 					<th>İl</th>
 					<th>İlçe</th>
+					<th>İGU</th>
+					<th>İH</th>
+					<th>DSP</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -110,11 +113,15 @@ function createTableHTML(data) {
 			<tr>
 				<td>${item.SozlesmeGirisiYapildiMi === true ? 'Yapıldı' : 'Yapılmadı'}</td>
 				<td>${item["Firma Adı"] || '-'}</td>
-				<td>${item["SGK İşyeri Sicil No"] || '-'}</td>
 				<td>${item["Yetkili Adı, Soyadı"] || '-'}</td>
+				<td>${item["Yetkili Telefon No"] || '-'}</td>
+				<td>${item["SGK İşyeri Sicil No"] || '-'}</td>
 				<td>${item["Tehlike Sınıfı"] || '-'}</td>
 				<td>${item["İşyeri Adresi (İl)"] || '-'}</td>
 				<td>${getIlce(item) || '-'}</td>
+				<td>${item["iguName"] || '-'}</td>
+				<td>${item["ihName"] || '-'}</td>
+				<td>${item["dspName"] || '-'}</td>
 			</tr>
 		`;
 	});
