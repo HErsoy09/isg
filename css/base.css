@@ -1,0 +1,252 @@
+/* base.css */
+
+/* 1. Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 2. Variables */
+:root {
+    /* Ana Renkler */
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --text-color: #333;
+    --light-gray: #f5f6fa;
+    --dark-gray: #2d3436;
+
+    /* Font Ailesi */
+    --font-glitch: 'Rubik Glitch', system-ui;
+    --font-primary: 'Poppins', sans-serif;
+    --font-body: 'Poppins', sans-serif;
+
+    /* Font Boyutları */
+    --h1-size: 2.5rem;
+    --h2-size: 2rem;
+    --h3-size: 1.75rem;
+    --body-size: 1rem;
+    --small-size: 0.875rem;
+
+    /* Boşluklar */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+
+    /* Border Radius */
+    --border-radius: 8px;
+
+    /* Geçiş Efekti */
+    --transition: all 0.3s ease;
+
+    /* Header Yüksekliği */
+    --header-height: 60px;
+}
+
+/* 3. Typography */
+body {
+    font-family: var(--font-body);
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--light-gray);
+}
+
+h1,
+.section-title {
+    font-family: var(--font-glitch);
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: var(--spacing-lg);
+    transition: all 0.3s ease;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.2;
+}
+
+
+
+h1 {
+    font-size: var(--h1-size);
+}
+
+h2 {
+    font-size: var(--h2-size);
+}
+
+h3 {
+    font-size: var(--h3-size);
+}
+
+p {
+    margin-bottom: var(--spacing-sm);
+}
+
+a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--primary-color);
+}
+
+/* Glitch efekti animasyonu */
+@keyframes glitchEffect {
+    0% {
+        text-shadow: 2px 2px 0 rgba(255, 0, 0, 0.5),
+            -2px -2px 0 rgba(0, 255, 255, 0.5);
+    }
+
+    25% {
+        text-shadow: -2px 2px 0 rgba(255, 0, 0, 0.5),
+            2px -2px 0 rgba(0, 255, 255, 0.5);
+    }
+
+    50% {
+        text-shadow: 2px -2px 0 rgba(255, 0, 0, 0.5),
+            -2px 2px 0 rgba(0, 255, 255, 0.5);
+    }
+
+    75% {
+        text-shadow: -2px -2px 0 rgba(255, 0, 0, 0.5),
+            2px 2px 0 rgba(0, 255, 255, 0.5);
+    }
+
+    100% {
+        text-shadow: 2px 2px 0 rgba(255, 0, 0, 0.5),
+            -2px -2px 0 rgba(0, 255, 255, 0.5);
+    }
+}
+
+/* Hover efektleri */
+h1:hover,
+.section-title:hover {
+    animation: glitchEffect 2s infinite;
+    transform: scale(1.02);
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+    :root {
+        --h1-size: 2rem;
+        --h2-size: 1.75rem;
+        --h3-size: 1.5rem;
+    }
+
+    h1,
+    .section-title {
+        font-size: calc(var(--h1-size) * 0.8);
+        letter-spacing: 0.5px;
+    }
+
+    h1:hover,
+    .section-title:hover {
+        animation: none;
+        transform: none;
+    }
+}
+
+
+/* 4. Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.mt-1 {
+    margin-top: var(--spacing-sm);
+}
+
+.mt-2 {
+    margin-top: var(--spacing-md);
+}
+
+.mt-3 {
+    margin-top: var(--spacing-lg);
+}
+
+.mb-1 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.mb-2 {
+    margin-bottom: var(--spacing-md);
+}
+
+.mb-3 {
+    margin-bottom: var(--spacing-lg);
+}
+
+/* 5. Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light-gray);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* 6. Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 1s ease-in;
+}
+
+/* 7. Accessibility */
+.skip-to-main {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--secondary-color);
+    color: white;
+    text-decoration: none;
+}
+
+.skip-to-main:focus {
+    left: 50%;
+    transform: translateX(-50%);
+    top: var(--spacing-sm);
+}
+
+/* 8. Enhanced Focus */
+a:focus,
+button:focus,
+input:focus,
+select:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+}

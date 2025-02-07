@@ -1,0 +1,206 @@
+/* layout.css */
+
+/* Main Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-sm);
+}
+
+/* Main Content */
+main {
+    padding-top: calc(var(--header-height) + 2rem);
+}
+
+/* Section Layouts */
+.section-block {
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Firma Section */
+#firma {
+    margin-top: calc(var(--header-height) + 2rem);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('/img/firma-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: var(--spacing-xl);
+    position: relative;
+}
+
+/* NACE Section */
+#nace {
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--spacing-xl) var(--spacing-lg);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+#nace::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/img/danger.svg') center/cover;
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+/* Result Container Layout */
+.result-container {
+    max-width: 1000px;
+    width: 100%;
+    margin-top: var(--spacing-lg);
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.result-container.visible {
+    display: block;
+    opacity: 1;
+}
+
+/* Firma Detail Layout */
+.firma-detay {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    margin-top: var(--spacing-md);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.firma-detay.active {
+    display: block;
+    animation: slideDown 0.3s ease-out;
+}
+
+.firma-detay-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+}
+
+/* Info Text Layout */
+.info-text {
+    max-width: 800px;
+    margin: 0 auto var(--spacing-lg);
+    text-align: center;
+}
+
+.note {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    margin-top: var(--spacing-md);
+}
+
+/* Glass Effect Layout */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    border-radius: var(--border-radius);
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+    .menu-items {
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+    }
+
+    nav ul {
+        flex-direction: column;
+        padding: var(--spacing-xs);
+    }
+
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-left {
+        margin-bottom: var(--spacing-lg);
+        padding-right: 0;
+    }
+
+    .footer-right {
+        text-align: center;
+    }
+
+    .search-container {
+        padding: var(--spacing-md);
+    }
+
+    .result-container {
+        padding: var(--spacing-sm);
+        margin: var(--spacing-sm);
+    }
+
+    .firma-detay-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-block {
+        padding: var(--spacing-sm);
+    }
+
+    #firma,
+    #nace {
+        padding: var(--spacing-md);
+    }
+}
+
+/* Print Layout */
+@media print {
+
+    header,
+    footer,
+    .search-container {
+        display: none;
+    }
+
+    body {
+        background: white;
+    }
+
+    .result-container {
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .result-table {
+        border: 1px solid #000;
+    }
+
+    .result-table th,
+    .result-table td {
+        border: 1px solid #000;
+    }
+}

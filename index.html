@@ -11,20 +11,27 @@
 	<title>HisgE</title>
 
 	<!-- Favicon -->
-	<link rel="icon" type="image/x-icon" href="favicon.ico">
+	<link type="image/png" sizes="96x96" rel="icon" href="img/favicon.png">
 
 	<!-- CSS ve Font Dosyaları -->
 	<link rel="stylesheet" href="css/styles.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link href="https://fonts.googleapis.com/css2?family=Rubik+Glitch&family=Poppins:wght@400;500;600&display=swap"
+		rel="stylesheet">
+
 </head>
 
 <body>
 	<header>
 		<nav>
 			<ul>
-				<li><a href="#firma">Firma Sorgulama</a></li>
-				<li><a href="#nace">NACE Sorgulama</a></li>
+				<li><img id="coder" src="img/coding.png" alt="Logo"></li>
+				<div class="menu-items">
+					<li><a href="#firma">Firma Sorgulama</a></li>
+					<li><a href="#nace">NACE Sorgulama</a></li>
+				</div>
 			</ul>
 		</nav>
 	</header>
@@ -32,7 +39,7 @@
 	<main class="container" role="main">
 		<!-- Firma Sorgulama Bölümü -->
 		<section id="firma" class="section-block">
-			<h1>Firma İSG-KATİP Sorgulama</h1>
+			<h1>Yeni Firma Sorgulama</h1>
 			<div class="info-text">
 				<p>Firma bilgilerini ve İSG-KATİP giriş durumlarını sorgulayabilirsiniz.</p>
 				<!-- <p class="note" style="font-style: italic"><b>Not:</b> İSG-KATİP verileri anlık değildir. Ben ne zaman
@@ -41,7 +48,7 @@
 
 				<p class="note"><b>Not:</b> Yaptığınız sorgu sonucunda aradığınız firma listede çıkmıyorsa lütfen
 					<u>Özcan Bey ile görüştükten sonra</u> <a href="https://forms.gle/YYdazpFpYMFGVYRR8" target="_blank"
-						style="color: black;">firma form</a> girişini yapın.
+						style="color:bisque;font-weight: bold;">yeni firma giriş formunu</a> doldurunuz.
 				</p>
 			</div>
 
@@ -72,50 +79,86 @@
 					</div>
 
 					<button onclick="searchFirma()" class="search-button">Firma Ara</button>
-
 				</form>
-
 			</div>
 
-			<div id="firmaResult" class="result-container"></div>
+			<div id="firmaResult" class="result-container">
+
+				<!-- Ana tablo için div -->
+				<div class="table-container"></div>
+
+				<!-- Detay görünümü için div -->
+				<div id="firmaDetay" class="firma-detay"></div>
+			</div>
 		</section>
 
-		<!-- NACE Sorgulama Bölümü -->
+		<!-- NACE Section -->
 		<section id="nace" class="section-block">
-			<h2>NACE Kodu Tehlike Sınıfı Sorgulama</h2>
+			<h1>NACE Kodu ve Tehlike Sınıfı </br> Sorgulama</h1>
 			<div class="info-text">
 				<p>NACE koduna göre tehlike sınıfı ve faaliyet açıklamasını sorgulayabilirsiniz.</p>
 			</div>
-
-			<div class="search-container">
+		
+			<div class="search-container glass-effect">
 				<form id="naceSearchForm" onsubmit="event.preventDefault(); searchNACE();">
 					<div class="search-group">
-						<input type="text" id="naceInput" placeholder="NACE kodu giriniz (Örn: 01.11.07)">
-						<button type="submit" class="search-button">NACE Ara</button>
+						<label for="naceInput">NACE Kodu veya Açıklama:</label>
+						<input type="text" id="naceInput"
+							placeholder="NACE kodu veya açıklama giriniz (Örn: 01.11.07 veya baklagil)"
+							class="search-input glass-input">
+						<button type="submit" class="search-button glass-button">NACE Ara</button>
 					</div>
 				</form>
 			</div>
-
-
+		
 			<div id="naceResult" class="result-container"></div>
 		</section>
 	</main>
 
-	<footer>
-		<div class="footer-content">
+<footer>
+	<div class="footer-container">
+		<!-- Sol Taraf -->
+		<div class="footer-left">
+			<img id="footer-logo" src="img/helmet.png" alt="logo">
+		</div>
+
+		<!-- Sağ Taraf -->
+		<div class="footer-right">
 			<div class="social-links">
 				<a href="https://linkedin.com/in/hakanersoy" target="_blank" rel="noopener noreferrer"
 					title="LinkedIn"><i class="fab fa-linkedin"></i></a>
 				<a href="https://github.com/HErsoy09" target="_blank" rel="noopener noreferrer" title="GitHub"><i
-						class="fab fa-github"></i></a>				
+						class="fab fa-github"></i></a>
 			</div>
 			<p>&copy; 2025 Hakan ERSOY - Tüm hakları Hakan'ındır... :)</p>
+			<img id="logo" src="img/imza.png" alt="logo">
 		</div>
-	</footer>
+	</div>
+</footer>
 
 	<!-- Scripts -->
 	<script src="js/config.js" defer></script>
 	<script src="js/script.js" defer></script>
+	<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+	<script>
+		particlesJS('nace', {
+			// particles.js config
+			particles: {
+				number: {
+					value: 80,
+					density: {
+						enable: true,
+						value_area: 800
+					}
+				},
+				color: {
+					value: '#ffffff'
+				},
+				// ... diğer ayarlar
+			}
+		});
+	</script>
+
 </body>
 
 </html>
