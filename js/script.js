@@ -6,7 +6,7 @@ const SHEET_URL = config.FIRMA_TAKIP_GOOGLE_SCRIPT_URL;
 async function loadDataNACE() {
 	try {
 		console.log('NACE verisi yükleniyor...'); // Debug log
-		const response = await fetch('/data/nace.json');
+		const response = await fetch('./data/nace.json');
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
@@ -108,7 +108,7 @@ async function searchNACE() {
             `;
 			resultDiv.classList.add('visible');
 		}
-		
+
 	} catch (error) {
 		console.error('Arama hatası:', error); // Debug log
 		resultDiv.innerHTML = `
