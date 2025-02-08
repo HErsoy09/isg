@@ -266,9 +266,10 @@ function showFirmaDetay(index) {
 
 	const detayDiv = document.getElementById('firmaDetay');
 
-	// Telefon numarasını güvenli bir şekilde işle
+	// Telefon numarasını formatla
 	const phoneNumber = firma["Yetkili Telefon No"];
-	const formattedPhone = phoneNumber ? String(phoneNumber).replace(/\D/g, '') : '';
+	const formattedPhone = formatPhoneNumber(phoneNumber);
+	const whatsappNumber = formatWhatsAppNumber(phoneNumber);
 
 	detayDiv.innerHTML = `
         <div class="firma-detay-grid">
@@ -282,21 +283,20 @@ function showFirmaDetay(index) {
                 <div class="detay-label">Yetkili Bilgileri</div>
                 <div class="detay-value">
                     <p>${firma["Yetkili Adı, Soyadı"] || '-'}</p>
-                    ${phoneNumber ? `
-                        <div class="contact-links">
-                            <a href="tel:${phoneNumber}" class="contact-link">
-                                <i class="fas fa-phone"></i>
-                                ${phoneNumber}
+                    ${formattedPhone ? `
+                        <a href="tel:${formattedPhone}" class="contact-link">
+                            <i class="fas fa-phone"></i>
+                            ${formattedPhone}
+                        </a>
+                        <br>
+                        ${whatsappNumber ? `
+                            <a href="https://wa.me/${whatsappNumber}" 
+                               class="contact-link whatsapp-link" 
+                               target="_blank">
+                                <i class="fab fa-whatsapp"></i>
+                                WhatsApp ile İletişim
                             </a>
-                            ${formattedPhone ? `
-                                <a href="https://wa.me/${formattedPhone}" 
-                                   class="contact-link" 
-                                   target="_blank">
-                                    <i class="fab fa-whatsapp"></i>
-                                    WhatsApp
-                                </a>
-                            ` : ''}
-                        </div>
+                        ` : ''}
                     ` : '-'}
                 </div>
             </div>
@@ -422,3 +422,45 @@ document.addEventListener('DOMContentLoaded', () => {
 		searchFirma();
 	});
 });
+
+// Telefon numarasını formatlayan yardımcı fonksiyon
+function formatPhoneNumber(phone) {
+	if (!phone) return '';
+
+	// Sadece rakamları al
+	let numbers = phone.replace(/\D/g, '');
+
+	// Başındaki 0'ı kaldır (varsa)
+	if (numbers.startsWith('0')) {
+		numbers = numbers.substring(1);
+	}
+
+	// Eğer 10 haneli değilse (başında 0 olmadan)
+	if (numbers.length !== 10) {
+		return phone; // Orijinal numarayı döndür
+	}
+
+	// Telefon görüntüleme formatı: 0 555 522 22 22
+	return `0 ${numbers.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4')}`;
+}
+
+// WhatsApp linki için telefon numarasını formatlayan fonksiyon
+function formatWhatsAppNumber(phone) {
+	if (!phone) return '';
+
+	// Sadece rakamları al
+	let numbers = phone.replace(/\D/g, '');
+
+	// Başındaki 0'ı kaldır (varsa)
+	if (numbers.startsWith('0')) {
+		numbers = numbers.substring(1);
+	}
+
+	// 10 haneli değilse null döndür
+	if (numbers.length !== 10) {
+		return null;
+	}
+
+	// WhatsApp formatı: +905551234567
+	return `+90${numbers}`;
+}
