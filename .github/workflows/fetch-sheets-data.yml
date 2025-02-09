@@ -49,9 +49,13 @@ jobs:
           # Verileri DataFrame'e dönüştür
           df = pd.DataFrame(values[1:], columns=values[0])
 
-          # CSV olarak kaydet
-          df.to_csv('google_sheets_data.csv', index=False)
-          print("Veriler başarıyla çekildi ve kaydedildi.")
+          # 'data' klasörünü oluştur (eğer yoksa)
+          os.makedirs('data', exist_ok=True)
+
+          # CSV olarak 'data' klasörüne kaydet
+          df.to_csv('data/yenifirmaveri.csv', index=False)
+          print("Veriler başarıyla çekildi ve data klasörüne kaydedildi.")
+
           EOF
 
       - name: Debug Spreadsheet Info
