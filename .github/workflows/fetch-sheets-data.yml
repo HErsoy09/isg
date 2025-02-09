@@ -87,7 +87,7 @@ jobs:
         run: |
           git config --global user.email "hersoy09@@users.noreply.github.com"
           git config --global user.name "GitHub Actions"
-          git add google_sheets_data.csv
+          git add yenifirmaveri.csv
           git commit -m "Update data from Google Sheets" || exit 0
           git push
           git push https://${GITHUB_TOKEN}@github.com/HErsoy09/isg.git
