@@ -1,0 +1,36 @@
+name: Fetch Google Sheets Data
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Her gün gece yarısı çalıştır
+  workflow_dispatch:  # Manuel tetikleme için
+
+jobs:
+  fetch-data:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    
+    - name: Install dependencies
+      run: |
+        pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
+
+    - name: Fetch Google Sheets data
+      env:
+        GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+        SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+      run: |
+        python your_script.py  # Google Sheets verilerini çeken Python scriptiniz
+
+    - name: Commit and push if changed
+      run: |
+        git config --global user.email "github-actions@example.com"
+        git config --global user.name "GitHub Actions"
+        git add .
+        git commit -m "Update data from Google Sheets" || exit 0
+        git push
