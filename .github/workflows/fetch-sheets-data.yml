@@ -18,19 +18,46 @@ jobs:
     
     - name: Install dependencies
       run: |
-        pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
+        pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client pandas
 
     - name: Fetch Google Sheets data
       env:
         GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
         SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
       run: |
-        python your_script.py  # Google Sheets verilerini çeken Python scriptiniz
+        python <<EOF
+        import os
+        import json
+        from google.oauth2.service_account import Credentials
+        from googleapiclient.discovery import build
+        import pandas as pd
+
+        # Kimlik bilgilerini ayarla
+        creds_json = os.environ['GOOGLE_SHEETS_CREDENTIALS']
+        creds_dict = json.loads(creds_json)
+        creds = Credentials.from_service_account_info(creds_dict)
+
+        # Sheets API'sini başlat
+        service = build('sheets', 'v4', credentials=creds)
+
+        # Verileri çek
+        sheet = service.spreadsheets()
+        result = sheet.values().get(spreadsheetId=os.environ['SPREADSHEET_ID'],
+                                    range='Sheet1!A1:Z').execute()
+        values = result.get('values', [])
+
+        # Verileri DataFrame'e dönüştür
+        df = pd.DataFrame(values[1:], columns=values[0])
+
+        # CSV olarak kaydet
+        df.to_csv('google_sheets_data.csv', index=False)
+        print("Veriler başarıyla çekildi ve kaydedildi.")
+        EOF
 
     - name: Commit and push if changed
       run: |
         git config --global user.email "github-actions@example.com"
         git config --global user.name "GitHub Actions"
-        git add .
+        git add google_sheets_data.csv
         git commit -m "Update data from Google Sheets" || exit 0
         git push
