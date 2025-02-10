@@ -505,45 +505,62 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Telefon numarasını formatlayan yardımcı fonksiyon
+// Telefon numarasını formatlayan yardımcı fonksiyon
 function formatPhoneNumber(phone) {
-	if (!phone) return '';
+    // phone null, undefined veya string değilse
+    if (!phone || typeof phone !== 'string') {
+        return null;
+    }
 
-	// Sadece rakamları al
-	let numbers = phone.replace(/\D/g, '');
+    try {
+        // Sadece rakamları al
+        let numbers = phone.replace(/\D/g, '');
 
-	// Başındaki 0'ı kaldır (varsa)
-	if (numbers.startsWith('0')) {
-		numbers = numbers.substring(1);
-	}
+        // Başındaki 0'ı kaldır (varsa)
+        if (numbers.startsWith('0')) {
+            numbers = numbers.substring(1);
+        }
 
-	// Eğer 10 haneli değilse (başında 0 olmadan)
-	if (numbers.length !== 10) {
-		return phone; // Orijinal numarayı döndür
-	}
+        // Eğer 10 haneli değilse (başında 0 olmadan)
+        if (numbers.length !== 10) {
+            return null;
+        }
 
-	// Telefon görüntüleme formatı: 0 555 522 22 22
-	return `0 ${numbers.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4')}`;
+        // Telefon görüntüleme formatı: 0 555 522 22 22
+        return `0 ${numbers.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4')}`;
+    } catch (error) {
+        console.error('Telefon formatlama hatası:', error);
+        return null;
+    }
 }
 
 // WhatsApp linki için telefon numarasını formatlayan fonksiyon
 function formatWhatsAppNumber(phone) {
-	if (!phone) return '';
+    // phone null, undefined veya string değilse
+    if (!phone || typeof phone !== 'string') {
+        return null;
+    }
 
-	// Sadece rakamları al
-	let numbers = phone.replace(/\D/g, '');
+    try {
+        // Sadece rakamları al
+        let numbers = phone.replace(/\D/g, '');
 
-	// Başındaki 0'ı kaldır (varsa)
-	if (numbers.startsWith('0')) {
-		numbers = numbers.substring(1);
-	}
+        // Başındaki 0'ı kaldır (varsa)
+        if (numbers.startsWith('0')) {
+            numbers = numbers.substring(1);
+        }
 
-	// 10 haneli değilse null döndür
-	if (numbers.length !== 10) {
-		return null;
-	}
+        // 10 haneli değilse null döndür
+        if (numbers.length !== 10) {
+            return null;
+        }
 
-	// WhatsApp formatı: +905551234567
-	return `+90${numbers}`;
+        // WhatsApp formatı: +905551234567
+        return `+90${numbers}`;
+    } catch (error) {
+        console.error('WhatsApp numarası formatlama hatası:', error);
+        return null;
+    }
 }
 
 // Test fonksiyonu
