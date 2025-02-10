@@ -2,7 +2,7 @@
   "name": "HisgE",
   "short_name": "HisgE",
   "description": "İSG-KATİP Firma Sorgulama ve NACE Kodu Tehlike Sınıfı Sorgulama",
-  "start_url": "/",
+  "start_url": "/isg/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
