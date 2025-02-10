@@ -286,27 +286,36 @@ function displayFirmaResults(data) {
 // Firma detaylarını görüntüleme
 function showFirmaDetay(index) {
     const firma = window.firmaData[index];
-    if (!firma) return;
+    if (!firma) {
+        console.error('Firma bilgisi bulunamadı');
+        return;
+    }
 
     const detayDiv = document.getElementById('firmaDetay');
 
+    // Güvenli veri alma yardımcı fonksiyonu
+    const getValue = (key, defaultValue = '-') => {
+        return firma[key] ? firma[key] : defaultValue;
+    };
+
     // Telefon numarasını formatla
-    const phoneNumber = firma["Yetkili Telefon No"];
-    const formattedPhone = formatPhoneNumber(phoneNumber);
-    const whatsappNumber = formatWhatsAppNumber(phoneNumber);
+    const phoneNumber = getValue("Yetkili Telefon No");
+    const formattedPhone = phoneNumber !== '-' ? formatPhoneNumber(phoneNumber) : null;
+    const whatsappNumber = phoneNumber !== '-' ? formatWhatsAppNumber(phoneNumber) : null;
 
     detayDiv.innerHTML = `
         <div class="firma-detay-grid">
             <div class="detay-grup">
-                <h3>${firma["Firma Adı"] || 'İsimsiz Firma'}</h3>
+                <h3>${getValue("Firma Adı", 'İsimsiz Firma')}</h3>
                 <div class="detay-label">SGK No</div>
-                <div class="detay-value">${firma["SGK İşyeri Sicil No"] || '-'}</div>
+                <div class="detay-value">${getValue("SGK İşyeri Sicil No")}</div>
             </div>
             
             <div class="detay-grup">
                 <div class="detay-label">Yetkili Bilgileri</div>
                 <div class="detay-value">
-                    <p>${firma["Yetkili Adı, Soyadı"] || '-'}</p>
+                    <p>${getValue("Yetkili Adı, Soyadı")}</p>
+                    <p><small>${getValue("Yetkili Unvanı")}</small></p>
                     ${formattedPhone ? `
                         <a href="tel:${formattedPhone}" class="contact-link">
                             <i class="fas fa-phone"></i>
@@ -321,31 +330,69 @@ function showFirmaDetay(index) {
                                 WhatsApp ile İletişim
                             </a>
                         ` : ''}
-                    ` : '-'}
+                    ` : ''}
+                    ${getValue("Yetkili E-Posta Adresi") !== '-' ? `
+                        <p>
+                            <a href="mailto:${getValue("Yetkili E-Posta Adresi")}" class="contact-link">
+                                <i class="fas fa-envelope"></i>
+                                ${getValue("Yetkili E-Posta Adresi")}
+                            </a>
+                        </p>
+                    ` : ''}
                 </div>
             </div>
 
             <div class="detay-grup">
                 <div class="detay-label">Adres Bilgileri</div>
                 <div class="detay-value">
-                    ${firma["İşyeri Adresi (İl)"] || '-'}/${getIlce(firma) || '-'}
+                    <p>${getValue("İşyeri Adresi (İl)")}/${getIlce(firma) || '-'}</p>
+                    ${getValue("İşyeri Adresi") !== '-' ? `
+                        <p><small>${getValue("İşyeri Adresi")}</small></p>
+                    ` : ''}
+                </div>
+            </div>
+
+            <div class="detay-grup">
+                <div class="detay-label">İletişim Bilgileri</div>
+                <div class="detay-value">
+                    ${getValue("İşyeri Telefon Numarası") !== '-' ? `
+                        <p>
+                            <i class="fas fa-phone"></i>
+                            ${getValue("İşyeri Telefon Numarası")}
+                        </p>
+                    ` : ''}
+                    ${getValue("İşyeri E-Posta Adresi") !== '-' ? `
+                        <p>
+                            <i class="fas fa-envelope"></i>
+                            ${getValue("İşyeri E-Posta Adresi")}
+                        </p>
+                    ` : ''}
+                    ${getValue("İnternet Adresi") !== '-' ? `
+                        <p>
+                            <i class="fas fa-globe"></i>
+                            <a href="${getValue("İnternet Adresi")}" target="_blank">
+                                ${getValue("İnternet Adresi")}
+                            </a>
+                        </p>
+                    ` : ''}
                 </div>
             </div>
 
             <div class="detay-grup">
                 <div class="detay-label">İSG Profesyonelleri</div>
                 <div class="detay-value">
-                    <p><strong>İGU:</strong> ${firma["iguName"] || '-'}</p>
-                    <p><strong>İH:</strong> ${firma["ihName"] || '-'}</p>
-                    <p><strong>DSP:</strong> ${firma["dspName"] || '-'}</p>
+                    <p><strong>İGU:</strong> ${getValue("iguName")}</p>
+                    <p><strong>İH:</strong> ${getValue("ihName")}</p>
+                    <p><strong>DSP:</strong> ${getValue("dspName")}</p>
                 </div>
             </div>
 
             <div class="detay-grup">
                 <div class="detay-label">Diğer Bilgiler</div>
                 <div class="detay-value">
-                    <p><strong>NACE Kodu:</strong> ${firma["NACE Kodu"] || '-'}</p>
-                    <p><strong>Tehlike Sınıfı:</strong> ${firma["Tehlike Sınıfı"] || '-'}</p>
+                    <p><strong>NACE Kodu:</strong> ${getValue("NACE Kodu")}</p>
+                    <p><strong>Tehlike Sınıfı:</strong> ${getValue("Tehlike Sınıfı")}</p>
+                    <p><strong>Çalışan Sayısı:</strong> ${getValue("Ortalama Çalışan Sayısı")}</p>
                     <p><strong>İSG-KATİP Durumu:</strong> 
                         <span class="${firma.SozlesmeGirisiYapildiMi ? 'status-success' : 'status-danger'}">
                             ${firma.SozlesmeGirisiYapildiMi ? 'Yapıldı' : 'Yapılmadı'}
@@ -353,6 +400,15 @@ function showFirmaDetay(index) {
                     </p>
                 </div>
             </div>
+
+            ${getValue("NOT") !== '-' ? `
+                <div class="detay-grup">
+                    <div class="detay-label">Not</div>
+                    <div class="detay-value">
+                        ${getValue("NOT")}
+                    </div>
+                </div>
+            ` : ''}
         </div>
     `;
 
@@ -363,9 +419,6 @@ function showFirmaDetay(index) {
         highlightElement(detayDiv);
     });
 }
-
-	
-
 
 // Scroll helper fonksiyonu
 function scrollToElement(element) {
