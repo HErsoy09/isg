@@ -25,8 +25,8 @@ async function loadDataFirma() {
     try {
         const response = await fetch(SHEET_URL);
         const data = await response.json();
+        console.log('Google Sheets\'ten gelen veri:', data); // Veriyi kontrol et
         
-        // Gelen verinin array olduğundan emin olalım
         if (!Array.isArray(data)) {
             console.error('Veri array formatında değil:', data);
             return [];
