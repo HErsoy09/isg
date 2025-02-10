@@ -24,15 +24,19 @@ async function loadDataNACE() {
 async function loadDataFirma() {
     try {
         const response = await fetch(SHEET_URL);
-        const data = await response.json();
-        console.log('Google Sheets\'ten gelen veri:', data); // Veriyi kontrol et
+        const result = await response.json();
         
-        if (!Array.isArray(data)) {
-            console.error('Veri array formatında değil:', data);
+        console.log('Tüm response:', result);
+        console.log('Data array uzunluğu:', result.data?.length);
+        console.log('İlk kayıt örneği:', result.data?.[0]);
+        
+        if (result && result.status === 'success' && Array.isArray(result.data)) {
+            return result.data;
+        } else {
+            console.error('Geçersiz veri formatı:', result);
             return [];
         }
         
-        return data;
     } catch (error) {
         console.error('Firma veri yükleme hatası:', error);
         return [];
