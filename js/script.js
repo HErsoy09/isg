@@ -26,12 +26,12 @@ async function loadDataFirma() {
         const response = await fetch(SHEET_URL);
         const result = await response.json();
         
-        console.log('Tüm response:', result);
-        console.log('Data array uzunluğu:', result.data?.length);
-        console.log('İlk kayıt örneği:', result.data?.[0]);
+        console.log('Google Sheets\'ten gelen veri:', result);
         
+        // Eğer result.data varsa ve bir array ise, onu döndür
         if (result && result.status === 'success' && Array.isArray(result.data)) {
-            return result.data;
+            console.log('Veri başarıyla yüklendi. Kayıt sayısı:', result.data.length);
+            return result.data; // data array'ini döndür
         } else {
             console.error('Geçersiz veri formatı:', result);
             return [];
@@ -157,7 +157,6 @@ async function searchFirma() {
 
     const resultDiv = document.getElementById("firmaResult");
 
-    // Tüm inputlar boşsa result'ı gizle
     if (!sozlesme && !firmaAdi && !sgkNo && !yetkiliAdi) {
         resultDiv.style.opacity = '0';
         setTimeout(() => {
@@ -167,7 +166,6 @@ async function searchFirma() {
         return;
     }
 
-    // Loading göster
     resultDiv.classList.add('visible');
     resultDiv.innerHTML = `
         <div class="loading-container fade-in-up">
@@ -177,15 +175,15 @@ async function searchFirma() {
     `;
 
     try {
-        const data = await loadDataFirma();
-        
-        // Veri kontrolü
-        if (!Array.isArray(data)) {
-            throw new Error('Veri formatı geçersiz');
+        const firmaData = await loadDataFirma(); // Veriyi al
+        console.log('Filtreleme için gelen veri:', firmaData); // Debug için log
+
+        if (!Array.isArray(firmaData)) {
+            throw new Error('Veri array formatında değil');
         }
 
-        let filteredData = data.filter(item => {
-            if (!item) return false; // null veya undefined kontrolü
+        let filteredData = firmaData.filter(item => {
+            if (!item) return false;
 
             const matchSozlesme = !sozlesme ||
                 (sozlesme === "TRUE" && item.SozlesmeGirisiYapildiMi === true) ||
@@ -202,6 +200,8 @@ async function searchFirma() {
 
             return matchSozlesme && matchFirma && matchSgk && matchYetkili;
         });
+
+        console.log('Filtrelenmiş veri:', filteredData); // Debug için log
 
         if (filteredData.length > 0) {
             setTimeout(() => {
@@ -220,6 +220,7 @@ async function searchFirma() {
             }, 500);
         }
     } catch (error) {
+        console.error('Arama hatası:', error);
         setTimeout(() => {
             resultDiv.innerHTML = `
                 <div class="error-message fade-in-up">
@@ -229,9 +230,9 @@ async function searchFirma() {
             `;
             resultDiv.classList.add('visible');
         }, 500);
-        console.error('Firma arama hatası:', error);
     }
 }
+
 
 
 // Firma sonuçlarını görüntüleme
@@ -491,3 +492,25 @@ function formatWhatsAppNumber(phone) {
 	// WhatsApp formatı: +905551234567
 	return `+90${numbers}`;
 }
+
+// Test fonksiyonu
+async function testDataStructure() {
+    try {
+        const response = await fetch(SHEET_URL);
+        const result = await response.json();
+        
+        console.log('Tüm response:', result);
+        console.log('Response type:', typeof result);
+        console.log('Status:', result.status);
+        console.log('Data type:', typeof result.data);
+        console.log('Is data array?', Array.isArray(result.data));
+        console.log('Data length:', result.data?.length);
+        console.log('First record:', result.data?.[0]);
+        
+    } catch (error) {
+        console.error('Test hatası:', error);
+    }
+}
+
+// Test fonksiyonunu çağır
+testDataStructure();
