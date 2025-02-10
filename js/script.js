@@ -213,10 +213,10 @@ async function searchFirma() {
 
 // Firma sonuçlarını görüntüleme
 function displayFirmaResults(data) {
-	const resultDiv = document.getElementById("firmaResult");
+    const resultDiv = document.getElementById("firmaResult");
 
-	// Ana container'ları oluştur
-	resultDiv.innerHTML = `
+    // Ana container'ları oluştur
+    resultDiv.innerHTML = `
         <div class="table-container">
             <table class="result-table">
                 <thead>
@@ -250,28 +250,28 @@ function displayFirmaResults(data) {
         <div id="firmaDetay" class="firma-detay"></div>
     `;
 
-	// Global değişkene veriyi kaydet
-	window.firmaData = data;
+    // Global değişkene veriyi kaydet
+    window.firmaData = data;
 
-	// Sonuçlara scroll
-	requestAnimationFrame(() => {
-		scrollToElement(resultDiv);
-	});
+    // Sonuçlara scroll
+    requestAnimationFrame(() => {
+        scrollToElement(resultDiv);
+    });
 }
 
 // Firma detaylarını görüntüleme
 function showFirmaDetay(index) {
-	const firma = window.firmaData[index];
-	if (!firma) return;
+    const firma = window.firmaData[index];
+    if (!firma) return;
 
-	const detayDiv = document.getElementById('firmaDetay');
+    const detayDiv = document.getElementById('firmaDetay');
 
-	// Telefon numarasını formatla
-	const phoneNumber = firma["Yetkili Telefon No"];
-	const formattedPhone = formatPhoneNumber(phoneNumber);
-	const whatsappNumber = formatWhatsAppNumber(phoneNumber);
+    // Telefon numarasını formatla
+    const phoneNumber = firma["Yetkili Telefon No"];
+    const formattedPhone = formatPhoneNumber(phoneNumber);
+    const whatsappNumber = formatWhatsAppNumber(phoneNumber);
 
-	detayDiv.innerHTML = `
+    detayDiv.innerHTML = `
         <div class="firma-detay-grid">
             <div class="detay-grup">
                 <h3>${firma["Firma Adı"] || 'İsimsiz Firma'}</h3>
@@ -320,6 +320,7 @@ function showFirmaDetay(index) {
             <div class="detay-grup">
                 <div class="detay-label">Diğer Bilgiler</div>
                 <div class="detay-value">
+                    <p><strong>NACE Kodu:</strong> ${firma["NACE Kodu"] || '-'}</p>
                     <p><strong>Tehlike Sınıfı:</strong> ${firma["Tehlike Sınıfı"] || '-'}</p>
                     <p><strong>İSG-KATİP Durumu:</strong> 
                         <span class="${firma.SozlesmeGirisiYapildiMi ? 'status-success' : 'status-danger'}">
@@ -331,13 +332,16 @@ function showFirmaDetay(index) {
         </div>
     `;
 
-	// Animasyon ve scroll
-	requestAnimationFrame(() => {
-		detayDiv.classList.add('active');
-		scrollToElement(detayDiv);
-		highlightElement(detayDiv);
-	});
+    // Animasyon ve scroll
+    requestAnimationFrame(() => {
+        detayDiv.classList.add('active');
+        scrollToElement(detayDiv);
+        highlightElement(detayDiv);
+    });
 }
+
+	
+
 
 // Scroll helper fonksiyonu
 function scrollToElement(element) {
