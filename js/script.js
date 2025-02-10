@@ -22,16 +22,22 @@ async function loadDataNACE() {
 
 // Firma verilerini yükleme
 async function loadDataFirma() {
-	try {
-		const response = await fetch(SHEET_URL);
-		return await response.json();
-
-	} catch (error) {
-		console.error('Firma veri yükleme hatası:', error);
-		return [];
-	}
+    try {
+        const response = await fetch(SHEET_URL);
+        const data = await response.json();
+        
+        // Gelen verinin array olduğundan emin olalım
+        if (!Array.isArray(data)) {
+            console.error('Veri array formatında değil:', data);
+            return [];
+        }
+        
+        return data;
+    } catch (error) {
+        console.error('Firma veri yükleme hatası:', error);
+        return [];
+    }
 }
-
 
 // NACE arama fonksiyonu
 async function searchNACE() {
@@ -140,74 +146,87 @@ document.getElementById("naceInput").placeholder = "NACE kodu veya açıklama gi
 
 // Firma arama fonksiyonu
 async function searchFirma() {
-	const sozlesme = document.getElementById("sozlesmeSelect").value;
-	const firmaAdi = document.getElementById("firmaAdi").value.toLowerCase();
-	const sgkNo = document.getElementById("sgkNo").value;
-	const yetkiliAdi = document.getElementById("yetkiliAdi").value.toLowerCase();
+    const sozlesme = document.getElementById("sozlesmeSelect").value;
+    const firmaAdi = document.getElementById("firmaAdi").value.toLowerCase();
+    const sgkNo = document.getElementById("sgkNo").value;
+    const yetkiliAdi = document.getElementById("yetkiliAdi").value.toLowerCase();
 
-	const resultDiv = document.getElementById("firmaResult");
+    const resultDiv = document.getElementById("firmaResult");
 
-	// Tüm inputlar boşsa result'ı gizle
-	if (!sozlesme && !firmaAdi && !sgkNo && !yetkiliAdi) {
-		resultDiv.style.opacity = '0';
-		setTimeout(() => {
-			resultDiv.classList.remove('visible');
-			resultDiv.innerHTML = '';
-		}, 300);
-		return;
-	}
+    // Tüm inputlar boşsa result'ı gizle
+    if (!sozlesme && !firmaAdi && !sgkNo && !yetkiliAdi) {
+        resultDiv.style.opacity = '0';
+        setTimeout(() => {
+            resultDiv.classList.remove('visible');
+            resultDiv.innerHTML = '';
+        }, 300);
+        return;
+    }
 
-	// Loading göster
-	resultDiv.classList.add('visible');
-	resultDiv.innerHTML = `
+    // Loading göster
+    resultDiv.classList.add('visible');
+    resultDiv.innerHTML = `
         <div class="loading-container fade-in-up">
             <div class="loading-spinner"></div>
             <div class="loading-text">Firmalar aranıyor...</div>
         </div>
     `;
 
-	try {
-		const data = await loadDataFirma();
-		let filteredData = data.filter(item => {
-			const matchSozlesme = !sozlesme ||
-				(sozlesme === "TRUE" && item.SozlesmeGirisiYapildiMi === true) ||
-				(sozlesme === "FALSE" && item.SozlesmeGirisiYapildiMi === false);
+    try {
+        const data = await loadDataFirma();
+        
+        // Veri kontrolü
+        if (!Array.isArray(data)) {
+            throw new Error('Veri formatı geçersiz');
+        }
 
-			const matchFirma = !firmaAdi || item["Firma Adı"].toLowerCase().includes(firmaAdi);
-			const matchSgk = !sgkNo || item["SGK İşyeri Sicil No"].includes(sgkNo);
-			const matchYetkili = !yetkiliAdi || item["Yetkili Adı, Soyadı"].toLowerCase().includes(yetkiliAdi);
+        let filteredData = data.filter(item => {
+            if (!item) return false; // null veya undefined kontrolü
 
-			return matchSozlesme && matchFirma && matchSgk && matchYetkili;
-		});
+            const matchSozlesme = !sozlesme ||
+                (sozlesme === "TRUE" && item.SozlesmeGirisiYapildiMi === true) ||
+                (sozlesme === "FALSE" && item.SozlesmeGirisiYapildiMi === false);
 
-		if (filteredData.length > 0) {
-			setTimeout(() => {
-				displayFirmaResults(filteredData);
-				resultDiv.classList.add('visible', 'fade-in-up');
-			}, 500);
-		} else {
-			setTimeout(() => {
-				resultDiv.innerHTML = `
+            const matchFirma = !firmaAdi || 
+                (item["Firma Adı"] && item["Firma Adı"].toLowerCase().includes(firmaAdi));
+                
+            const matchSgk = !sgkNo || 
+                (item["SGK İşyeri Sicil No"] && item["SGK İşyeri Sicil No"].includes(sgkNo));
+                
+            const matchYetkili = !yetkiliAdi || 
+                (item["Yetkili Adı, Soyadı"] && item["Yetkili Adı, Soyadı"].toLowerCase().includes(yetkiliAdi));
+
+            return matchSozlesme && matchFirma && matchSgk && matchYetkili;
+        });
+
+        if (filteredData.length > 0) {
+            setTimeout(() => {
+                displayFirmaResults(filteredData);
+                resultDiv.classList.add('visible', 'fade-in-up');
+            }, 500);
+        } else {
+            setTimeout(() => {
+                resultDiv.innerHTML = `
                     <div class="no-results fade-in-up">
                         <i class="fas fa-search"></i>
                         <p>Firma bulunamadı.</p>
                     </div>
                 `;
-				resultDiv.classList.add('visible');
-			}, 500);
-		}
-	} catch (error) {
-		setTimeout(() => {
-			resultDiv.innerHTML = `
+                resultDiv.classList.add('visible');
+            }, 500);
+        }
+    } catch (error) {
+        setTimeout(() => {
+            resultDiv.innerHTML = `
                 <div class="error-message fade-in-up">
                     <i class="fas fa-exclamation-circle"></i>
-                    <p>Firma sorgulama hatası oluştu.</p>
+                    <p>Firma sorgulama hatası: ${error.message}</p>
                 </div>
             `;
-			resultDiv.classList.add('visible');
-		}, 500);
-		console.error('Firma arama hatası:', error);
-	}
+            resultDiv.classList.add('visible');
+        }, 500);
+        console.error('Firma arama hatası:', error);
+    }
 }
 
 
