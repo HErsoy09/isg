@@ -21,22 +21,29 @@ async function loadDataNACE() {
 
 
 // Firma verilerini yükleme
+// loadDataFirma fonksiyonuna ekleyin
 async function loadDataFirma() {
     try {
         const response = await fetch(SHEET_URL);
         const result = await response.json();
         
-        console.log('Google Sheets\'ten gelen veri:', result);
+        console.log('Ham veri örneği:', result.data?.[0]); // İlk kaydın yapısını görelim
+        console.log('SGK No örneği:', result.data?.[0]?.["SGK İşyeri Sicil No"]);
         
-        // Eğer result.data varsa ve bir array ise, onu döndür
         if (result && result.status === 'success' && Array.isArray(result.data)) {
-            console.log('Veri başarıyla yüklendi. Kayıt sayısı:', result.data.length);
-            return result.data; // data array'ini döndür
+            // Veriyi string'e çevirme işlemi
+            const processedData = result.data.map(item => ({
+                ...item,
+                "SGK İşyeri Sicil No": item["SGK İşyeri Sicil No"] ? String(item["SGK İşyeri Sicil No"]) : '',
+                "Firma Adı": item["Firma Adı"] ? String(item["Firma Adı"]) : '',
+                "Yetkili Adı, Soyadı": item["Yetkili Adı, Soyadı"] ? String(item["Yetkili Adı, Soyadı"]) : ''
+            }));
+            
+            return processedData;
         } else {
             console.error('Geçersiz veri formatı:', result);
             return [];
         }
-        
     } catch (error) {
         console.error('Firma veri yükleme hatası:', error);
         return [];
@@ -182,24 +189,34 @@ async function searchFirma() {
             throw new Error('Veri array formatında değil');
         }
 
-        let filteredData = firmaData.filter(item => {
-            if (!item) return false;
-
-            const matchSozlesme = !sozlesme ||
-                (sozlesme === "TRUE" && item.SozlesmeGirisiYapildiMi === true) ||
-                (sozlesme === "FALSE" && item.SozlesmeGirisiYapildiMi === false);
-
-            const matchFirma = !firmaAdi || 
-                (item["Firma Adı"] && item["Firma Adı"].toLowerCase().includes(firmaAdi));
-                
-            const matchSgk = !sgkNo || 
-                (item["SGK İşyeri Sicil No"] && item["SGK İşyeri Sicil No"].includes(sgkNo));
-                
-            const matchYetkili = !yetkiliAdi || 
-                (item["Yetkili Adı, Soyadı"] && item["Yetkili Adı, Soyadı"].toLowerCase().includes(yetkiliAdi));
-
-            return matchSozlesme && matchFirma && matchSgk && matchYetkili;
-        });
+        // Firma arama fonksiyonu içindeki filtreleme kısmını güncelleyelim
+	let filteredData = firmaData.filter(item => {
+	    if (!item) return false;
+	
+	    const matchSozlesme = !sozlesme ||
+	        (sozlesme === "TRUE" && item.SozlesmeGirisiYapildiMi === true) ||
+	        (sozlesme === "FALSE" && item.SozlesmeGirisiYapildiMi === false);
+	
+	    // SGK numarası kontrolünü güvenli hale getirelim
+	    const matchSgk = !sgkNo || (
+	        item["SGK İşyeri Sicil No"] && 
+	        String(item["SGK İşyeri Sicil No"]).includes(sgkNo)
+	    );
+	
+	    // Firma adı kontrolünü güvenli hale getirelim
+	    const matchFirma = !firmaAdi || (
+	        item["Firma Adı"] && 
+	        String(item["Firma Adı"]).toLowerCase().includes(firmaAdi)
+	    );
+	
+	    // Yetkili adı kontrolünü güvenli hale getirelim
+	    const matchYetkili = !yetkiliAdi || (
+	        item["Yetkili Adı, Soyadı"] && 
+	        String(item["Yetkili Adı, Soyadı"]).toLowerCase().includes(yetkiliAdi)
+	    );
+	
+	    return matchSozlesme && matchFirma && matchSgk && matchYetkili;
+	});
 
         console.log('Filtrelenmiş veri:', filteredData); // Debug için log
 
