@@ -21,34 +21,39 @@ async function loadDataNACE() {
 
 
 // Firma verilerini yükleme
-// loadDataFirma fonksiyonuna ekleyin
+// loadDataFirma fonksiyonunu da güncelleyelim
 async function loadDataFirma() {
     try {
         const response = await fetch(SHEET_URL);
         const result = await response.json();
         
-        console.log('Ham veri örneği:', result.data?.[0]); // İlk kaydın yapısını görelim
-        console.log('SGK No örneği:', result.data?.[0]?.["SGK İşyeri Sicil No"]);
+        // Veri yapısını kontrol et
+        console.log('Google Sheets ham veri:', result);
         
         if (result && result.status === 'success' && Array.isArray(result.data)) {
-            // Veriyi string'e çevirme işlemi
+            // Veriyi işle ve temizle
             const processedData = result.data.map(item => ({
                 ...item,
-                "SGK İşyeri Sicil No": item["SGK İşyeri Sicil No"] ? String(item["SGK İşyeri Sicil No"]) : '',
-                "Firma Adı": item["Firma Adı"] ? String(item["Firma Adı"]) : '',
-                "Yetkili Adı, Soyadı": item["Yetkili Adı, Soyadı"] ? String(item["Yetkili Adı, Soyadı"]) : ''
+                "SGK İşyeri Sicil No": item["SGK İşyeri Sicil No"] != null ? 
+                    String(item["SGK İşyeri Sicil No"]).trim() : '',
+                "Firma Adı": item["Firma Adı"] != null ? 
+                    String(item["Firma Adı"]).trim() : '',
+                "Yetkili Adı, Soyadı": item["Yetkili Adı, Soyadı"] != null ? 
+                    String(item["Yetkili Adı, Soyadı"]).trim() : ''
             }));
             
+            console.log('İşlenmiş veri örneği:', processedData[0]);
             return processedData;
-        } else {
-            console.error('Geçersiz veri formatı:', result);
-            return [];
         }
+        
+        throw new Error('Geçersiz veri formatı');
+        
     } catch (error) {
-        console.error('Firma veri yükleme hatası:', error);
-        return [];
+        console.error('Veri yükleme hatası:', error);
+        throw error;
     }
 }
+
 
 // NACE arama fonksiyonu
 async function searchNACE() {
@@ -164,6 +169,7 @@ async function searchFirma() {
 
     const resultDiv = document.getElementById("firmaResult");
 
+    // Tüm alanlar boşsa aramayı durdur
     if (!sozlesme && !firmaAdi && !sgkNo && !yetkiliAdi) {
         resultDiv.style.opacity = '0';
         setTimeout(() => {
@@ -173,6 +179,7 @@ async function searchFirma() {
         return;
     }
 
+    // Loading göster
     resultDiv.classList.add('visible');
     resultDiv.innerHTML = `
         <div class="loading-container fade-in-up">
@@ -182,44 +189,57 @@ async function searchFirma() {
     `;
 
     try {
-        const firmaData = await loadDataFirma(); // Veriyi al
-        console.log('Filtreleme için gelen veri:', firmaData); // Debug için log
+        const firmaData = await loadDataFirma();
+        console.log('Filtreleme için gelen ham veri:', firmaData); // Debug log
 
+        // Veri kontrolü
         if (!Array.isArray(firmaData)) {
             throw new Error('Veri array formatında değil');
         }
 
-        // Firma arama fonksiyonu içindeki filtreleme kısmını güncelleyelim
-	let filteredData = firmaData.filter(item => {
-	    if (!item) return false;
-	
-	    const matchSozlesme = !sozlesme ||
-	        (sozlesme === "TRUE" && item.SozlesmeGirisiYapildiMi === true) ||
-	        (sozlesme === "FALSE" && item.SozlesmeGirisiYapildiMi === false);
-	
-	    // SGK numarası kontrolünü güvenli hale getirelim
-	    const matchSgk = !sgkNo || (
-	        item["SGK İşyeri Sicil No"] && 
-	        String(item["SGK İşyeri Sicil No"]).includes(sgkNo)
-	    );
-	
-	    // Firma adı kontrolünü güvenli hale getirelim
-	    const matchFirma = !firmaAdi || (
-	        item["Firma Adı"] && 
-	        String(item["Firma Adı"]).toLowerCase().includes(firmaAdi)
-	    );
-	
-	    // Yetkili adı kontrolünü güvenli hale getirelim
-	    const matchYetkili = !yetkiliAdi || (
-	        item["Yetkili Adı, Soyadı"] && 
-	        String(item["Yetkili Adı, Soyadı"]).toLowerCase().includes(yetkiliAdi)
-	    );
-	
-	    return matchSozlesme && matchFirma && matchSgk && matchYetkili;
-	});
+        // Filtreleme fonksiyonu
+        let filteredData = firmaData.filter(item => {
+            // Null check
+            if (!item) return false;
 
-        console.log('Filtrelenmiş veri:', filteredData); // Debug için log
+            // Sözleşme kontrolü
+            const matchSozlesme = !sozlesme ||
+                (sozlesme === "TRUE" && item.SozlesmeGirisiYapildiMi === true) ||
+                (sozlesme === "FALSE" && item.SozlesmeGirisiYapildiMi === false);
 
+            // Firma adı kontrolü
+            const matchFirma = !firmaAdi || 
+                (item["Firma Adı"] && 
+                 String(item["Firma Adı"]).toLowerCase().includes(firmaAdi));
+
+            // SGK no kontrolü - güvenli kontrol
+            const matchSgk = !sgkNo || (
+                item["SGK İşyeri Sicil No"] !== null && 
+                item["SGK İşyeri Sicil No"] !== undefined && 
+                String(item["SGK İşyeri Sicil No"]).indexOf(sgkNo) !== -1
+            );
+
+            // Yetkili adı kontrolü
+            const matchYetkili = !yetkiliAdi || 
+                (item["Yetkili Adı, Soyadı"] && 
+                 String(item["Yetkili Adı, Soyadı"]).toLowerCase().includes(yetkiliAdi));
+
+            // Debug log
+            if (sgkNo) {
+                console.log('SGK No Kontrolü:', {
+                    aranan: sgkNo,
+                    mevcut: item["SGK İşyeri Sicil No"],
+                    tip: typeof item["SGK İşyeri Sicil No"],
+                    eslesme: matchSgk
+                });
+            }
+
+            return matchSozlesme && matchFirma && matchSgk && matchYetkili;
+        });
+
+        console.log('Filtrelenmiş veri:', filteredData); // Debug log
+
+        // Sonuçları göster
         if (filteredData.length > 0) {
             setTimeout(() => {
                 displayFirmaResults(filteredData);
@@ -236,19 +256,21 @@ async function searchFirma() {
                 resultDiv.classList.add('visible');
             }, 500);
         }
+
     } catch (error) {
         console.error('Arama hatası:', error);
         setTimeout(() => {
             resultDiv.innerHTML = `
                 <div class="error-message fade-in-up">
                     <i class="fas fa-exclamation-circle"></i>
-                    <p>Firma sorgulama hatası: ${error.message}</p>
+                    <p>Arama sırasında bir hata oluştu: ${error.message}</p>
                 </div>
             `;
             resultDiv.classList.add('visible');
         }, 500);
     }
 }
+
 
 
 
