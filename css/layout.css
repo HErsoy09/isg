@@ -1,5 +1,29 @@
 /* layout.css */
 
+/* iframe */
+
+
+.iframe-container.collapsed {
+    height: 100px;
+    overflow: hidden;
+}
+
+.iframe-placeholder {
+    background-color: #f0f0f0;
+    border: 2px dashed #999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.iframe-placeholder:hover {
+    background-color: #e0e0e0;
+}
+
 /* Main Container */
 .container {
     max-width: 1200px;
