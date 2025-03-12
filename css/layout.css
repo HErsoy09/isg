@@ -1,7 +1,27 @@
 /* layout.css */
 
-/* iframe */
+/* Main Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-sm);
+}
 
+/* Main Content */
+main {
+    padding-top: calc(var(--header-height) + 2rem);
+}
+
+/* Section Layouts */
+.section-block {
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* iframe */
 
 .iframe-container.collapsed {
     height: 100px;
@@ -22,27 +42,6 @@
 
 .iframe-placeholder:hover {
     background-color: #e0e0e0;
-}
-
-/* Main Container */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 var(--spacing-sm);
-}
-
-/* Main Content */
-main {
-    padding-top: calc(var(--header-height) + 2rem);
-}
-
-/* Section Layouts */
-.section-block {
-    margin-bottom: var(--spacing-xl);
-    padding: var(--spacing-lg);
-    background-color: rgba(0, 0, 0, 0.4);
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Firma Section */
