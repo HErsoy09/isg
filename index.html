@@ -30,6 +30,7 @@
 			<ul>
 				<li><img id="coder" src="./img/coding.png" alt="Logo"></li>
 				<div class="menu-items">
+					<li><a href="#yeni">Yeni Firma Girişi</a></li>
 					<li><a href="#firma">Firma Sorgulama</a></li>
 					<li><a href="#nace">NACE Sorgulama</a></li>
 				</div>
@@ -38,6 +39,26 @@
 	</header>
 
 	<main class="container" role="main">
+
+		<!-- Yeni Firma Giriş Bölümü -->
+		<section id="yeni" class="section-block">
+		    <div class="iframe-container collapsed">
+		        <div class="iframe-placeholder" onclick="expandIframe(this)">
+		            <h3>Yeni Firma Girişi Formu</h3>
+		            <p>Formu görüntülemek için tıklayın</p>
+		        </div>
+		        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfhOdpgYTQ4C22cpiq8rYcK17WxOFAolPHxDROdBNqzWABElA/viewform?embedded=true" 
+		                width="640" 
+		                height="2203" 
+		                frameborder="0" 
+		                marginheight="0" 
+		                marginwidth="0"
+		                style="display:none;">
+		            Loading…
+		        </iframe>
+		    </div>
+		</section>
+		
 		<!-- Firma Sorgulama Bölümü -->
 		<section id="firma" class="section-block">
 			<h1>Yeni Firma Sorgulama</h1>
@@ -158,6 +179,16 @@
 				// ... diğer ayarlar
 			}
 		});
+	</script>
+	<script>
+		function expandIframe(placeholder) {
+		    const container = placeholder.closest('.iframe-container');
+		    const iframe = container.querySelector('iframe');
+		    
+		    container.classList.remove('collapsed');
+		    placeholder.style.display = 'none';
+		    iframe.style.display = 'block';
+		}
 	</script>
 
 </body>
