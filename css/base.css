@@ -46,6 +46,10 @@
     --header-height: 60px;
 }
 
+body, html {
+    height: 100%;
+}
+
 /* 3. Typography */
 body {
     font-family: var(--font-body);
