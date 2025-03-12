@@ -45,6 +45,7 @@ nav ul li a {
 
 nav ul li a:hover {
     background-color: rgba(255, 255, 255, 0.1);
+    color: var(--accent-color);
 }
 
 /* Form Components */
@@ -456,8 +457,7 @@ textarea:focus {
 footer {
     background-color: var(--dark-gray);
     color: white;
-    padding: var(--spacing-lg) 0;
-    margin-top: var(--spacing-xl);
+    margin-top: 0;
 }
 
 .footer-container {
@@ -465,6 +465,7 @@ footer {
     justify-content: space-between;
     align-items: center;
     max-width: 1200px;
+    max-height: fit-content;
     margin: 0 auto;
     padding: 0 var(--spacing-lg);
 }
@@ -472,6 +473,29 @@ footer {
 .footer-left {
     flex: 1;
     padding-right: var(--spacing-lg);
+}
+
+
+.footer-spinner {
+    border: 5px solid transparent;
+    border-top: 5px solid #ff9603;
+    border-right: 5px solid #fff;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 1s linear infinite, color-change 3s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes color-change {
+    0% { border-top-color: #ff9603; border-right-color: #fff; }
+    50% { border-top-color: #fff; border-right-color: #ff9603; }
+    100% { border-top-color: #ff9603; border-right-color: #fff; }
 }
 
 .footer-right {

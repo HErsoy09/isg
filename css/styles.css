@@ -46,7 +46,13 @@
     width: 40%;
     height: auto;
     max-width: 200px;
-    margin-top: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+}
+
+#imza {
+    width: 40%;
+    height: auto;
+    max-width: 200px;
 }
 
 /* Contact Links */

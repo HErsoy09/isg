@@ -39,22 +39,19 @@
 	</header>
 
 	<main class="container" role="main">
-
 		<!-- Yeni Firma Giriş Bölümü -->
 		<section id="yeni" class="section-block">
-		    <div class="iframe-container collapsed">
-		        <div class="iframe-placeholder" onclick="expandIframe(this)">
-		            <h3>Yeni Firma Girişi Formu</h3>
-		            <p>Formu görüntülemek için tıklayın</p>
-		        </div>
-		        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfhOdpgYTQ4C22cpiq8rYcK17WxOFAolPHxDROdBNqzWABElA/viewform?embedded=true" 
-		                frameborder="0" 
-		                marginheight="0" 
-		                marginwidth="0"
-		                style="display:none;">
-		            Loading…
-		        </iframe>
-		    </div>
+			<div class="iframe-container collapsed">
+				<div class="iframe-placeholder" onclick="expandIframe(this)">
+					<h3>Yeni Firma Girişi Formu</h3>
+					<p>Formu görüntülemek için tıklayın</p>
+				</div>
+				<iframe
+					src="https://docs.google.com/forms/d/e/1FAIpQLSfhOdpgYTQ4C22cpiq8rYcK17WxOFAolPHxDROdBNqzWABElA/viewform?embedded=true"
+					frameborder="0" marginheight="0" marginwidth="0" style="display:none;">
+					Loading…
+				</iframe>
+			</div>
 		</section>
 		
 		<!-- Firma Sorgulama Bölümü -->
@@ -139,8 +136,10 @@
 	<div class="footer-container">
 		<!-- Sol Taraf -->
 		<div class="footer-left">
-			<img id="footer-logo" src="./img/helmet.png" alt="logo">
+			<img id="footer-logo" src="./img/logo.png" alt="logo">
 		</div>
+
+		<div class="footer-spinner"></div>
 
 		<!-- Sağ Taraf -->
 		<div class="footer-right">
@@ -151,7 +150,7 @@
 						class="fab fa-github"></i></a>
 			</div>
 			<p>&copy; 2025 Hakan ERSOY - Tüm hakları Hakan'ındır... :)</p>
-			<img id="logo" src="./img/imza.png" alt="logo">
+			<img id="imza" src="./img/imza.png" alt="imza">
 		</div>
 	</div>
 </footer>
@@ -179,14 +178,14 @@
 		});
 	</script>
 	<script>
-		function expandIframe(placeholder) {
-		    const container = placeholder.closest('.iframe-container');
-		    const iframe = container.querySelector('iframe');
-		    
-		    container.classList.remove('collapsed');
-		    placeholder.style.display = 'none';
-		    iframe.style.display = 'block';
-		}
+	function expandIframe(placeholder) {
+		const container = placeholder.closest('.iframe-container');
+		const iframe = container.querySelector('iframe');
+
+		container.classList.remove('collapsed');
+		placeholder.style.display = 'none';
+		iframe.style.display = 'block';
+	}
 	</script>
 
 </body>
